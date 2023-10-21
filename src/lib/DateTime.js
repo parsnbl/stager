@@ -32,6 +32,9 @@ class DateTime extends Date {
       );
     return this;
   }
+  clone = () => {
+    return new DateTime(this.getTime());
+  }
 
 }
 
