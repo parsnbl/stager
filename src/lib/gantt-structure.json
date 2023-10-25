@@ -1,0 +1,21 @@
+{
+  "name":"plan_name",
+  "tags": [],
+  "default_View": "",
+  "extra_columns": [],
+  "rows": [
+    {
+      "row-name": "",
+      "row-tags": "",
+      "row-type": "",
+      "row-start": "",
+      "row-end": "",
+      "row-color": "",
+      "status": "",
+      "extra_columns_values": [],
+      "parent": "false",
+      "children": []
+
+    }
+  ]
+}
