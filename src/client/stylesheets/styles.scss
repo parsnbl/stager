@@ -1,0 +1,27 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+
+#container{
+    @include sizing-border;
+    height: 100vh;
+    width: 100vw;
+    display: grid;
+    
+}
+
+.nav {
+    @include sizing-border;
+}
+.sidebar {
+    @include sizing-border;
+}
+.tabview {
+    @include sizing-border;
+}
+.tabview-tabs {
+    @include sizing-border;
+}
+.tabview-content {
+    @include sizing-border;
+}
