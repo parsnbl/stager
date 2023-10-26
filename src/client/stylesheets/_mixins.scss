@@ -1,4 +1,5 @@
-
+@use 'variables' as variables;
 @mixin sizing-border {
-    border: 1px dashed black;
+    border: 1px solid variables.$border;
+   // border-radius: 5px;
 }

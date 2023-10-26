@@ -1,27 +1,76 @@
 @use 'variables' as *;
 @use 'mixins' as *;
 
+html {
+    box-sizing: border-box;
+}
+body {
+    margin: 0px;
+}
+html, body, #app, #app>div {
+    height: calc(100% - 1px);
+    width: calc(100% - 1px);
+    background-color: $background;
+  }
 
 #container{
     @include sizing-border;
-    height: 100vh;
-    width: 100vw;
     display: grid;
+    grid-template-columns: [app-left sidebar-start] 1fr [sidebar-end tabview-start] 1fr 1fr 1fr [app-right tabview-end];
+    grid-template-rows: [nav-start app-top] 44px [nav-end main-start] 1fr [main-end app-bottom];
+
     
 }
 
 .nav {
-    @include sizing-border;
-}
+    border-bottom: 1px solid $border;
+    border-right: 1px solid $border;
+    grid-column: sidebar-start;
+    grid-row: nav-start / nav-end;
+    background-color:$modals;
+    padding: 10px 0px 10px 10px;
+
+}   
 .sidebar {
-    @include sizing-border;
+    border-right: 1px solid $border;
+    grid-row: main-start/main-end;
+    grid-column: sidebar-start/sidebar-end;
+    background-color: $background;
 }
+
+
+.icons {
+    color: $primary-color;
+    size: 24;
+    margin: 0px 8.5px;
+}
+
+.file-explorer-icons {
+    padding: 10px 0px 10px 10px;
+}
+
+/* Tab View */
 .tabview {
-    @include sizing-border;
+    
+    grid-row: app-top/main-end;
+    grid-column: tabview-start/tabview-end;
+    display: grid;
+    grid-template-rows: 92px 1fr;
+    background-color:$tabs;
 }
 .tabview-tabs {
-    @include sizing-border;
+    background-color: $background;
+    display: flex;
+    align-items: flex-end;
+    
 }
 .tabview-content {
-    @include sizing-border;
+    border-top: 1px solid $border;
+    
+}
+.tabview-top-tab {
+    background-color: $tabs;
+    height: 50%;
+    border-top: 3px solid $border;
+    width: 80px;
 }
