@@ -5,11 +5,11 @@
 $primaryColor: variables.$primary-color;
 
 .plan_container {
-    display: grid;
-    grid-template-columns: [plan-left] 1fr 1fr 1fr 1fr repeat(6, 1fr) [plan-right];
-    grid-template-rows: 60px repeat(3, 50px);
+    display: flex;
+    flex-direction:column;
     border: 1px solid variables.$border;
     height: 500px;
+    padding-left: 10px;
 }
 
 .plan_details {
@@ -18,24 +18,35 @@ $primaryColor: variables.$primary-color;
     }
 }
 
-.plan_headers {
-    @include mixins.plan-columns;
-    grid-column: plan-left /plan-right;
-    display: grid;
-    grid-template-rows: 1fr;
-    border-bottom: 1px solid variables.$border;
-    height: 50px;
+.plan_table {
+    display: grid;   
+    grid-template-rows: [header-start]  20px [header-end] auto;
     align-items: end;
+    grid-row-gap: 1px;
     div {
         color: variables.$primary-color;
         padding: 2px 5px;
-        list-style-type: none;
-        text-align: start;
-        border-right: 1px solid variables.$border;
+        font-size: 12px;
+  
     }
     
 }
 
+.plan_header_cell {
+    grid-row: header-start/header-end;
+    border-bottom: 1px solid variables.$border;
+}
+
+.plan_detail_cell {
+    border-right: 1px solid variables.$border;
+    border-bottom: 1px solid variables.$border;
+    height: 100%;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    vertical-align: center;
+}
+/*
 .plan_row {
     @include mixins.plan-columns;
     border-bottom: 1px solid variables.$border;
@@ -46,4 +57,33 @@ $primaryColor: variables.$primary-color;
     color: variables.$primary-text;
     justify-items: left;
     align-items: center;
+}
+*/
+
+.tables_wrapper {
+    display: flex;
+    color: variables.$primary-color;
+    
+}
+
+.plan_column_one {
+    width: 50px;
+    font-size: 12px;
+    display: grid;
+    align-items: end;
+    width: auto;
+    border-right: 3px solid variables.$border;
+    border-left: 1px solid variables.$border;
+    div {
+        padding: 2px 5px;
+        width: 80px;
+        display: flex;
+        justify-content: left;
+        align-items: center;
+        vertical-align: center;
+        border-bottom: 1px solid variables.$border;
+    }
+    div:first-of-type{
+        border-top: 1px solid variables.$border;
+    }
 }
