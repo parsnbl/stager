@@ -1,0 +1,49 @@
+@use 'variables';
+@use 'mixins';
+
+
+$primaryColor: variables.$primary-color;
+
+.plan_container {
+    display: grid;
+    grid-template-columns: [plan-left] 1fr 1fr 1fr 1fr repeat(6, 1fr) [plan-right];
+    grid-template-rows: 60px repeat(3, 50px);
+    border: 1px solid variables.$border;
+    height: 500px;
+}
+
+.plan_details {
+    h1 {
+        color: variables.$primary-color;
+    }
+}
+
+.plan_headers {
+    @include mixins.plan-columns;
+    grid-column: plan-left /plan-right;
+    display: grid;
+    grid-template-rows: 1fr;
+    border-bottom: 1px solid variables.$border;
+    height: 50px;
+    align-items: end;
+    div {
+        color: variables.$primary-color;
+        padding: 2px 5px;
+        list-style-type: none;
+        text-align: start;
+        border-right: 1px solid variables.$border;
+    }
+    
+}
+
+.plan_row {
+    @include mixins.plan-columns;
+    border-bottom: 1px solid variables.$border;
+    grid-column: plan-left /plan-right;
+    display: grid;
+    grid-template-rows: 1fr;
+    height: 50px;
+    color: variables.$primary-text;
+    justify-items: left;
+    align-items: center;
+}

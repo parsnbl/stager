@@ -1,5 +1,14 @@
 @use 'variables' as variables;
+
 @mixin sizing-border {
     border: 1px solid variables.$border;
    // border-radius: 5px;
+}
+
+@mixin icon-bar {
+    padding: 10px 0px 10px 10px;
+}
+
+@mixin plan-columns {
+    grid-template-columns:[plan-left plan-settings-start] auto 1fr 1fr 1fr [plan-settings-stop bars-start] repeat(6, 1fr) [plan-right];
 }
