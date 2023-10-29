@@ -1,0 +1,9 @@
+@use 'variables';
+@use 'mixins';
+
+
+.icons {
+    color: $primary-color;
+    size: 24;
+    margin: 0px 8.5px;
+}

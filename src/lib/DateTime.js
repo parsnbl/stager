@@ -38,4 +38,15 @@ class DateTime extends Date {
 
 }
 
-export default DateTime
+const DAILY = 'DAILY';
+const WEEKLY = 'WEEKLY';
+const MONTHLY = 'MONTHLY';
+const QUARTERLY = 'QUARTERLY';
+export const CONSTS = {
+  DAILY,
+  WEEKLY,
+  MONTHLY,
+  QUARTERLY
+};
+
+export default DateTime;

@@ -1,0 +1,12 @@
+@use 'variables';
+@use 'mixins';
+
+.plan_detail_cell {
+    border-right: 1px solid variables.$border;
+    border-bottom: 1px solid variables.$border;
+    height: 100%;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    
+}

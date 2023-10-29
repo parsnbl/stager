@@ -1,0 +1,9 @@
+@use 'variables';
+@use 'mixins';
+
+.plan_header_cell {
+    grid-row: header;
+    border-bottom: 1px solid variables.$border;
+    border-right: 1px solid variables.$border;
+    padding: 2px 5px;
+}
