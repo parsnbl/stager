@@ -19,10 +19,10 @@ class Table {
   };
 
   _increment = (property, val = 1) => {
-    if (val + property < 0) {
-      property = 0;
+    if (val + this[property] < 0) {
+      this[property] = 0;
     } else {
-      property += val;
+      this[property] += val;
     }
   };
 
@@ -33,14 +33,19 @@ class Table {
 
   //utilities - table cleaning
   _populateNulls = () => {
-    for (let i = 0; i < this.colsLen; i++) {
-      const column = this._table[i];
-      if (column.values.length < this.rowsLen) {
-        const delta = this.rowsLen - column.values.length;
-        for (let j = 0; j < delta; j++) column.values.push(this.defaultEmpty);
+    try{
+      for (let i = 0; i < this.colsLen; i++) {
+        const column = this._table[i];
+        if (column.values.length < this.rowsLen) {
+          const delta = this.rowsLen - column.values.length;
+          for (let j = 0; j < delta; j++) column.values.push(this.defaultEmpty);
+        }
       }
+      return;
+    } catch (err) {
+      console.log(err);
+      throw err;
     }
-    return;
   };
 
   _removeNullRows = () => {
@@ -57,7 +62,7 @@ class Table {
         break;
       }
     }
-    this._increment(this.rowsLen, -rowsRemoved);
+    this._increment('rowsLen', -rowsRemoved);
     return [rowsRemoved];
   };
  
@@ -69,9 +74,17 @@ class Table {
     if (values !== undefined && !Array.isArray(values)) {
       throw new Error(`Values is not an Array, but type ${typeof values}`);
     }
-    this._table[this.colsLen] = this._returnEntry(column, values);
-    this._increment(this.colsLen);
-    this._populateNulls();
+    try{
+      console.log('entry is', this._returnEntry(column, values))
+      this._table[this.colsLen] = this._returnEntry(column, values);
+      this._increment('colsLen', 1);
+      console.log('table is', this._table);
+      this._populateNulls();
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+    
     
   };
   pushToColumn = (column, value) => {
@@ -92,25 +105,70 @@ class Table {
 
   getColumn = (column) => {
     const id = this._findColumnID(column);
-    return this._table[id];
+    return this.getColumnIdx(id);
+  };
+
+  getColumnIdx = (idx) => {
+    return this._table[idx];
   };
 
   getColAtInd = (column, ind) => {
     const col = this.getColumn(column);
     return col[this.valuesDefault][ind];
+  };
 
+  getColIdxAtInd = (idx, ind) => {
+    const col = this.getColumnIdx(idx);
+    return col[this.valuesDefault][ind];
+  };
+
+  setColumn = (column, values) => {
+    const id = this._findColumnID(column);
+    return this.setColumnIdx(id, values);
+  };
+
+  setColumnIdx = (idx, values) => {
+    this._table[idx][this.valuesDefault] = values;
+    this._populateNulls();
+    return {[idx]: this._returnEntry(this._table[idx][this.keyDefault], this._table[idx][this.valuesDefault])};
+  };
+  setColAtInd = (column, ind, value) => {
+    const id = this._findColumnID(column);
+    return this.setColIdxAtInd(id, ind, value);
+  };
+  setColIdxAtInd = (idx, ind, value) => {
+    this._table[idx][this.valuesDefault][ind] = value;
+    this._populateNulls();
+    return {[idx]: this._returnEntry(this._table[idx][this.keyDefault], this._table[idx][this.valuesDefault])};
   };
 
   deleteColumn = (column) => {
+    //note that this will delete from the front if there are duplicate keys.
     const id = this._findColumnID(column);
-    delete this._table[id];
-    this._increment(this.colsLen, -1);
-
+    return this.deleteColumnIdx(id);
   };
 
-  deleteRow = (rowInd) => {
-    const output = Object.keys(this._table).map(column => column.values.splice(rowInd));
-    return output.flat();
+  deleteColumnIdx = (idx) => {
+    const temp = this._table[idx];
+    //delete this._table[idx];
+    for (let i = idx; i < Object.keys(this._table).length; i++) {
+      this._table[idx] = this._table[idx + 1];
+    }
+    delete this._table[this.colsLen - 1];
+    this._increment('colsLen', -1);
+    return temp;
+  };
+
+  deleteRow = (idx) => {
+    const output = Object.keys(this._table).map(column => {
+      const out = this._table[column][this.valuesDefault].splice(idx, 1);
+      return {[this._table[column][this.keyDefault]]: out[0]};
+    });
+    this._increment('rowsLen', -1);
+    return output.reduce((acc,val) => {
+      acc = {...acc, ...val};
+      return acc;
+    }, {});
   };
 
   clearTable = () => {
@@ -130,6 +188,7 @@ class Table {
   getIndsKeys = () => {
     return Object.keys(this._table).reduce((acc, val)=>{
       acc[val] = this._table[val][this.keyDefault];
+      return acc;
     }, {});
   };
 
@@ -170,13 +229,13 @@ class Table {
   toEntries = () => {
     return Object.values(this._table).map((elem, i) => [`${i}_${elem.column}`, elem.values]);
   };
-  
+
   fromEntries = (entries) => {
     this.clearTable();
     try {
       entries.map((entry, i)=>{
         this._table[i] = this._returnEntry(entry[0], entry[1]);
-        this._increment(this.colsLen);
+        this._increment('colsLen', 1);
         this.rowsLen = Math.max(this.rowsLen, entry[1].length);
       });
       this._populateNulls();
@@ -190,12 +249,54 @@ class Table {
 
 /*
 {
-  0:{
-    column: string|null
-    values: Array[any]
-  },
-  ...
+  rowsLen: 5,
+  colsLen: 4,
+  defaultEmpty: null,
+  keyDefault: 'column',
+  valuesDefault: 'values',
+  _table: {
+    '0': {
+      column: 'Row Label',
+      values: [
+        'Try to do something cool',
+        'Try to do something cool',
+        'Try to do something cool',
+        'Try to do something cool',
+        'Try to do something cool'
+      ]
+    },
+    '1': {
+      column: 'Start Date',
+      values: [
+        '2023-10-01',
+        '2023-10-02',
+        '2023-10-03',
+        '2023-10-04',
+        '2023-10-05'
+      ]
+    },
+    '2': {
+      column: 'End Date',
+      values: [
+        '2023-10-15',
+        '2023-10-16',
+        '2023-10-17',
+        '2023-10-18',
+        '2023-10-19'
+      ]
+    },
+    '3': {
+      column: 'Status',
+      values: [
+        'In Progress',
+        'In Progress',
+        'In Progress',
+        'In Progress',
+        'In Progress'
+      ]
+    }
+  }
 }
-
-
 */
+
+export default Table;

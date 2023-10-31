@@ -5,6 +5,7 @@ import HeaderCell from '../components/HeaderCell.jsx';
 import DetailCell from '../components/DetailCell.jsx';
 import AddButton from '../components/AddRowButton.jsx';
 import { CONSTS } from '../../lib/DateTime';
+import Table from '../../lib/Table';
 import * as Icons from 'react-feather';
 
 const Plan = props => {
@@ -21,27 +22,65 @@ const Plan = props => {
     ]
   };
 
-  const brokenTable = [
-    ['Row Label', ['Try', null, null,]],
-    ['Start Date', ['2023-10-01', null,null, ]],
-    ['End Date', ['2023-10-15', null,]],
-    ['Status', ['In Progress', null,null,]],
-  ];
+  
 
   const data_2 = {
-    numCols: 4,
-    numRows: 5,
     dayView: CONSTS.DAILY,
     table: {
-      0:  ['Row Label', ['Try to do something cool', 'Try to do something cool', 'Try to do something cool', 'Try to do something cool', 'Try to do something cool']],
-      1: ['Start Date', ['2023-10-01', '2023-10-02', '2023-10-03', '2023-10-04', '2023-10-05', ]],
-      2: ['End Date', ['2023-10-15', '2023-10-16', '2023-10-17', '2023-10-18', '2023-10-19',]],
-      3: ['Status', ['In Progress', 'In Progress', 'In Progress', 'In Progress', 'In Progress']],
+      rowsLen: 5,
+      colsLen: 4,
+      defaultEmpty: null,
+      keyDefault: 'column',
+      valuesDefault: 'values',
+      _table: {
+        '0': {
+          column: 'Row Label',
+          values: [
+            'Try to do something cool',
+            'Try to do something cool',
+            'Try to do something cool',
+            'Try to do something cool',
+            'Try to do something cool'
+          ]
+        },
+        '1': {
+          column: 'Start Date',
+          values: [
+            '2023-10-01',
+            '2023-10-02',
+            '2023-10-03',
+            '2023-10-04',
+            '2023-10-05'
+          ]
+        },
+        '2': {
+          column: 'End Date',
+          values: [
+            '2023-10-15',
+            '2023-10-16',
+            '2023-10-17',
+            '2023-10-18',
+            '2023-10-19'
+          ]
+        },
+        '3': {
+          column: 'Status',
+          values: [
+            'In Progress',
+            'In Progress',
+            'In Progress',
+            'In Progress',
+            'In Progress'
+          ]
+        }
+      }
     }
   };
   const [planState, setPlanState ] = useState(data);
+  const [tableState, setTableState] = useState(data_2.table);
+  
   const dataMap = new Map(planState.table);
-
+  const table = new Table(data_2.table);
 
   const produceColumns = () => {
     const detailCols = '1fr '.repeat(planState.numCols - 1).trimEnd()
