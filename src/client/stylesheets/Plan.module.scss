@@ -6,7 +6,7 @@ $primaryColor: variables.$primary-color;
 
 .plan_container {
     display: flex;
-    flex-direction:column;
+    flex-direction: column;
     border: 1px solid variables.$border;
     height: 500px;
     padding-left: 10px;
@@ -19,33 +19,9 @@ $primaryColor: variables.$primary-color;
 }
 
 .plan_table {
-    display: grid;   
-    align-items: end;
-    grid-row-gap: 1px;
-    div {
-        color: variables.$primary-color;
-        
-        font-size: 12px;
-  
-    }
-    
+    @include mixins.uniform-grid-settings;
 }
 
-.plan_header_cell {
-    grid-row: header;
-    border-bottom: 1px solid variables.$border;
-    padding: 2px 5px;
-}
-
-.plan_detail_cell {
-    border-right: 1px solid variables.$border;
-    border-bottom: 1px solid variables.$border;
-    height: 100%;
-    display: flex;
-    justify-content: left;
-    align-items: center;
-    vertical-align: center;
-}
 /*
 .plan_row {
     @include mixins.plan-columns;
@@ -67,22 +43,15 @@ $primaryColor: variables.$primary-color;
 }
 
 .plan_column_one {
-    width: 50px;
+    @include mixins.uniform-grid-settings;
     font-size: 12px;
-    display: grid;
-    align-items: end;
-    width: auto;
-    border-right: 2px solid variables.$border;
-    border-left: 1px solid variables.$border;
-    div {
-        padding: 2px 5px;
-        width: 80px;
-        display: flex;
-        justify-content: left;
-        align-items: center;
-        vertical-align: center;
-        border-bottom: 1px solid variables.$border;
-    }
+    width: 150px;
+    // .plan_header_cell {
+    //     width: 150px;
+    // }
+    // .detail_cell {
+    //     width: 150px;
+    // }
     div:first-of-type{
         border-top: 1px solid variables.$border;
     }

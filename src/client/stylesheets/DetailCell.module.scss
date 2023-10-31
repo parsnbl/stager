@@ -2,9 +2,8 @@
 @use 'mixins';
 
 .plan_detail_cell {
-    border-right: 1px solid variables.$border;
-    border-bottom: 1px solid variables.$border;
-    height: 100%;
+    @include mixins.uniform-cell-style;
+    @include mixins.cell-borders;
     display: flex;
     justify-content: left;
     align-items: center;

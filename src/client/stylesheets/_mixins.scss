@@ -12,3 +12,21 @@
 @mixin plan-columns {
     grid-template-columns:[plan-left plan-settings-start] auto 1fr 1fr 1fr [plan-settings-stop bars-start] repeat(6, 1fr) [plan-right];
 }
+
+@mixin uniform-cell-style {
+    height: 20px;
+    padding: 2px 5px;
+    font-size: 12px;
+    color: variables.$primary-color;
+}
+
+@mixin cell-borders {
+    border-right: 1px solid variables.$border;
+    border-bottom: 1px solid variables.$border;
+}
+
+@mixin uniform-grid-settings {
+    display: grid;
+    align-items: end;
+    grid-row-gap: 1px;
+}

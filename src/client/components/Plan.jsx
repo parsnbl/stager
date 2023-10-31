@@ -1,11 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../stylesheets/Plan.module.scss';
 
 import HeaderCell from '../components/HeaderCell.jsx';
 import DetailCell from '../components/DetailCell.jsx';
+import AddRowButton from '../components/AddRowButton.jsx';
 import { CONSTS } from '../../lib/DateTime';
+import * as Icons from 'react-feather';
 
 const Plan = props => {
+  
   const data = {
     numCols: 4,
     numRows: 5,
@@ -17,11 +20,12 @@ const Plan = props => {
       ['Status', ['In Progress', 'In Progress', 'In Progress', 'In Progress', 'In Progress']],
     ]
   };
-  const dataMap = new Map(data.table);
+  const [planState, setPlanState ] = useState(data);
+  const dataMap = new Map(planState.table);
 
 
   const produceColumns = () => {
-    const detailCols = '1fr '.repeat(data.numCols - 1).trimEnd()
+    const detailCols = '1fr '.repeat(planState.numCols - 1).trimEnd()
     const calendarcolumns = ['1fr', '1fr', '1fr', '1fr', '1fr', '1fr'];
     return ['[plan-start detail-start]', detailCols, '[detail-end date-start]',...calendarcolumns, '[date-end plan-end]'].join(' ');
   };
@@ -29,9 +33,9 @@ const Plan = props => {
   // const rows = '[header-start]  20px [header-end table-start] 1fr 1fr 1fr 1fr 1fr';
   
   const headerRows = ['20px'];
-  const lastRow = ['20px'];
+  const lastRow = ['30px'];
   const produceRows = () => {
-    const tableRows = '1fr '.repeat(data.numRows).trimEnd(); 
+    const tableRows = '1fr '.repeat(planState.numRows).trimEnd(); 
     return ['[header-start]', ...headerRows, '[header-end table-start]', tableRows, '[table-end add-row-start]', ...lastRow, '[add-row-end]'].join(' ');
   };
 
@@ -44,7 +48,6 @@ const Plan = props => {
       text={headerName}
       row = '1/span 1'
       column = {`${columnInd}/span 1`}
-     
     />);
     for (let i = 0; i < arr.length; i++) {
       const value = arr[i];
@@ -78,10 +81,18 @@ const Plan = props => {
   };
   const [firstColumn, tableColumns] = buildTable(dataMap);
   
+
+  const addRow = () => {
+    console.log('Add Row occured!');
+    const newState = {...planState, numRows: planState.numRows += 1};
+    setPlanState(newState);
+    console.log(newState)
+  };
+
   const rows = produceRows();
   const columns = produceColumns();
 
-
+  firstColumn.push(<AddRowButton key={crypto.randomUUID()} clickHandler={addRow}/>);
 
   return (
     <div className={styles.plan_container}>

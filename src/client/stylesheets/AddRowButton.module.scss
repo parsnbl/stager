@@ -1,0 +1,13 @@
+@use 'variables';
+@use 'mixins';
+
+.add_row_button {
+    @include mixins.uniform-cell-style;
+    display: flex;
+    grid-row: 'add-row-start / add-row-end';
+    justify-content: center;
+    align-items: center;
+    svg:active {
+        outline: 2px solid variables.$bittersweet;
+    }
+}
