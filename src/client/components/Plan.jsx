@@ -3,7 +3,7 @@ import styles from '../stylesheets/Plan.module.scss';
 
 import HeaderCell from '../components/HeaderCell.jsx';
 import DetailCell from '../components/DetailCell.jsx';
-import AddRowButton from '../components/AddRowButton.jsx';
+import AddButton from '../components/AddRowButton.jsx';
 import { CONSTS } from '../../lib/DateTime';
 import * as Icons from 'react-feather';
 
@@ -19,6 +19,25 @@ const Plan = props => {
       ['End Date', ['2023-10-15', '2023-10-16', '2023-10-17', '2023-10-18', '2023-10-19',]],
       ['Status', ['In Progress', 'In Progress', 'In Progress', 'In Progress', 'In Progress']],
     ]
+  };
+
+  const brokenTable = [
+    ['Row Label', ['Try', null, null,]],
+    ['Start Date', ['2023-10-01', null,null, ]],
+    ['End Date', ['2023-10-15', null,]],
+    ['Status', ['In Progress', null,null,]],
+  ];
+
+  const data_2 = {
+    numCols: 4,
+    numRows: 5,
+    dayView: CONSTS.DAILY,
+    table: {
+      0:  ['Row Label', ['Try to do something cool', 'Try to do something cool', 'Try to do something cool', 'Try to do something cool', 'Try to do something cool']],
+      1: ['Start Date', ['2023-10-01', '2023-10-02', '2023-10-03', '2023-10-04', '2023-10-05', ]],
+      2: ['End Date', ['2023-10-15', '2023-10-16', '2023-10-17', '2023-10-18', '2023-10-19',]],
+      3: ['Status', ['In Progress', 'In Progress', 'In Progress', 'In Progress', 'In Progress']],
+    }
   };
   const [planState, setPlanState ] = useState(data);
   const dataMap = new Map(planState.table);
@@ -39,7 +58,22 @@ const Plan = props => {
     return ['[header-start]', ...headerRows, '[header-end table-start]', tableRows, '[table-end add-row-start]', ...lastRow, '[add-row-end]'].join(' ');
   };
 
-  
+  const addRow = () => {
+    console.log('Add Row occured!');
+    const newState = {...planState, numRows: planState.numRows += 1};
+    newState.table.map(column => column[1].push(null));
+    setPlanState(newState);
+    console.log(newState);
+  };
+
+  const addColumn = () => {
+    console.log('Add Column occured!');
+    const newState = {...planState, numCols: planState.numCols += 1};
+    newState.table.push([null, new Array(planState.numRows).fill(null)]);
+    setPlanState(newState);
+    console.log(newState);
+  };
+
   //takes the array and the header
   const buildColumn = (arr, columnInd, headerName = 'Row Label') => {
     const column = [];
@@ -64,35 +98,35 @@ const Plan = props => {
   };
   
   const buildTable = (dataMap) => {
-    const keys = dataMap.keys();
-    let i = 0;
+    const keys = Array.from(dataMap.keys());
+    console.log(dataMap.keys())
     let tableOutput = [];
     let firstColumn = [];
-    for (const key of keys){
+    for (let i = 0; i < keys.length; i++){
+      const key = keys[i];
+      console.log(key, i);
       const temp = buildColumn(dataMap.get(key), i, key);
       if (i === 0) {
         firstColumn = [...temp];
       } else {
         tableOutput = [...tableOutput, ...temp];
       }
-      i++;
     }
+    let len = keys.length;
+    firstColumn.push(<AddButton key={crypto.randomUUID()} clickHandler={addRow}/>);
+    tableOutput.push(<AddButton column={{len}} clickHandler={addColumn}/>);
+    console.log(tableOutput)
     return [firstColumn, tableOutput];
   };
   const [firstColumn, tableColumns] = buildTable(dataMap);
   
 
-  const addRow = () => {
-    console.log('Add Row occured!');
-    const newState = {...planState, numRows: planState.numRows += 1};
-    setPlanState(newState);
-    console.log(newState)
-  };
+ 
 
   const rows = produceRows();
   const columns = produceColumns();
 
-  firstColumn.push(<AddRowButton key={crypto.randomUUID()} clickHandler={addRow}/>);
+  
 
   return (
     <div className={styles.plan_container}>
