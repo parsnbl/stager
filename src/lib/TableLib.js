@@ -162,7 +162,7 @@ tableLib.changeColumnTypeIdx = (state, idx, type) => {
 tableLib.renameColIdx = (state, idx, value) => {
   console.log('idx', idx, 'val', value)
   console.log(state._table[idx][state.defaultColKey])
-  //state._table[idx][state.defaultColKey] = value;
+  state._table[idx][state.defaultColKey] = value;
 };
 
 tableLib.setColAtInd = (state, column, ind, value) => {
