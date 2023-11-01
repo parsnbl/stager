@@ -9,3 +9,10 @@
     align-items: center;
     
 }
+
+.plan_header_cell {
+    @include mixins.uniform-cell-style;
+    @include mixins.cell-borders;
+    padding-bottom: 0px;
+    grid-row: header;
+}

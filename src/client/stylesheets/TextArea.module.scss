@@ -1,0 +1,20 @@
+@use 'variables';
+@use 'mixins';
+
+@mixin uniform-text-area {
+    border: 0px;
+    resize: none;
+    background-color: variables.$background;
+    color: variables.$primary-color;
+    font-size: 12px;
+}
+
+.default_text_area {
+    @include uniform-text-area;
+
+}
+
+.error_text_area {
+    @include uniform-text-area;
+    color: variables.$bittersweet
+}

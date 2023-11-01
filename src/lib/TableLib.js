@@ -1,3 +1,42 @@
+import React from 'react';
+import { createAction } from '@reduxjs/toolkit';
+
+import DateTime from './DateTime.js';
+import TextButton from '../client/components/TextButton.jsx';
+import TextArea from '../client/components/TextArea.jsx';
+export const dataTypes = {
+  const: Object.freeze({
+    RAW: 'RAW',
+    TEXT: 'TEXT',
+    DATE: 'DATE',
+    BUTTON: 'BUTTON',
+    LIST: 'LIST',
+    EMPTY: 'EMPTY'
+  }),
+  canCoerce: {
+    RAW: (value) => true,
+    TEXT: (value) => {
+      try {
+        const temp = String(value);
+        return true;
+      } catch(err) {
+        return false;
+      }
+    },
+    DATE: (value) => {
+      try {
+        const temp = new DateTime(value);
+        return true;
+      } catch(err) {
+        return false;
+      }
+    },
+    BUTTON: (value) => dataTypes.canCoerce.TEXT(value),
+    LIST: (value) => {false}, // need to implement
+    EMPTY: (value) => true,
+  }
+};
+
 const tableLib = {};
 
 //lower order functions
@@ -14,8 +53,11 @@ tableLib.increment = (state, property, val = 1) => {
   }
 };
 
-tableLib.returnEntry = (state, k, v) => {
-  return {[state.defaultColKey]: k, [state.defaultColValues]: v };
+tableLib.returnEntry = (state, k, v, type = dataTypes.const.TEXT, fixed = false) => {
+  if (!Object.hasOwn(dataTypes.const, type)) { 
+    throw new Error(`Provided type of ${type} not in supported types: ${Object.keys(dataTypes.const).join(', ')}`);
+};
+  return {[state.defaultColKey]: k, [state.defaultColValues]: v, type, fixed };
 };
 
 tableLib.populateNulls = (state) => {
@@ -60,12 +102,16 @@ tableLib.hasColumn = (state, column) => {
 };
 
 //higher order crud
-tableLib.pushColumn = (state, column, values) => {
+tableLib.pushColumn = (state, column, values, type, fixed) => {
   try {
-    console.log('entry is', tableLib.returnEntry(state, column, values));
-    state._table[state.colsLen] = tableLib.returnEntry(state, column, values);
+    state._table[state.colsLen] = tableLib.returnEntry(
+      state, 
+      column, 
+      values, 
+      type,
+      fixed  
+    );
     tableLib.increment(state,'colsLen', 1);
-    console.log('table is', state._table);
     tableLib.populateNulls(state);
   } catch(err) {
     console.log(err);
@@ -75,14 +121,9 @@ tableLib.pushColumn = (state, column, values) => {
 
 tableLib.pushToColumn = (state, column, value) => {
   if (tableLib.hasColumn(state, column)) {
-    console.log('Column Found');
     const id = tableLib.findColumnId(state, column);
-    console.log('id is', id);
     state._table[id][state.defaultColValues].push(value);
-    console.log('vals array', state._table[id][state.defaultColValues]);
-    console.log('rowsLen before', state.rowsLen);
     tableLib.increment(state,'rowsLen', 1);
-    console.log('rowsLen after', state.rowsLen);
     tableLib.populateNulls(state);
   } else {
     throw new Error(`Column is not available in table: ${column}`);
@@ -98,6 +139,30 @@ tableLib.setColumnIdx = (state, idx, values) => {
   state._table[idx][state.defaultColValues] = values;
   tableLib.populateNulls(state);
   //return {[idx]: tableLib.returnEntry(state, state._table[idx][state.defaultColKey], state._table[idx][state.defaultColValues])};
+};
+
+tableLib.changeColumnType = (state, column, type) => {
+  const idx = tableLib.findColumnId(state, column);
+  return tableLib.changeColumnTypeIdx(state, idx, type)
+};
+
+tableLib.changeColumnTypeIdx = (state, idx, type) => {
+  if (!Object.hasOwn(dataTypes, type)) {
+    throw new Error(`Provided type of ${type} not in supported types: ${Object.keys(dataTypes).join(', ')}`);
+  }
+  const values = state._table[idx][state.defaultColValues];
+  if (values.every(elem => dataTypes.canCoerce[type](elem))) {
+    state._table[idx].type = type;
+  } else {
+    const notCoercable = values.some(elem => !dataTypes.canCoerce[type](elem));
+    throw new Error(`column at idx ${idx} can't be coerced to type '${type}' as the following elements aren't coercable: ${notCoercable.join(', ')}`);
+  }
+};
+
+tableLib.renameColIdx = (state, idx, value) => {
+  console.log('idx', idx, 'val', value)
+  console.log(state._table[idx][state.defaultColKey])
+  //state._table[idx][state.defaultColKey] = value;
 };
 
 tableLib.setColAtInd = (state, column, ind, value) => {
@@ -186,5 +251,12 @@ tableLib.getColIdxAtInd = (state, idx, ind) => {
 //   }
 //   console.log('Binding complete!');
 // };
+
+//action creator for datatypes TextArea
+
+const textAreaUpdate = createAction('plans/setColIdxAtInd');
+
+
+
 
 export default tableLib;

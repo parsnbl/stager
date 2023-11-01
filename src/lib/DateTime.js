@@ -2,6 +2,19 @@
 class DateTime extends Date {
   constructor(...args) {
     super(...args)
+    this.TimezoneAware = false;
+  }
+  makeTimezoneAware = () => {
+    if (!this.TimezoneAware) {
+      const offset = this.getTimezoneOffset();
+      const currentMinutes = this.getMinutes();
+      this.setMinutes(currentMinutes + offset);
+      this.TimezoneAware = true;
+      return this;
+    } else {
+      throw new Error(`DateTime of ${this} is already timezone aware.`);
+    }
+    
   }
   getDaysFromYearStart = () => {
     const yearStart = new Date(this.getFullYear(), 0 , 1);

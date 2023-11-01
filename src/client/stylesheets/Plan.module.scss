@@ -45,7 +45,7 @@ $primaryColor: variables.$primary-color;
 .plan_column_one {
     @include mixins.uniform-grid-settings;
     font-size: 12px;
-    width: 150px;
+    width: fit-content;
     // .plan_header_cell {
     //     width: 150px;
     // }

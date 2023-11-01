@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from '../stylesheets/HeaderCell.module.scss';
 
-const HeaderCell = ({ row, column, text}) => {
+const HeaderCell = ({ row, column, value}) => {
   const styleSettings = {
     gridRow: row,
     gridColumn: column
@@ -11,7 +11,7 @@ const HeaderCell = ({ row, column, text}) => {
       className={styles.plan_header_cell}
       style={styleSettings}
     >
-      {text}
+      {value}
     </div>
   );
 };

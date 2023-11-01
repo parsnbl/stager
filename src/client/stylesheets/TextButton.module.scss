@@ -1,0 +1,12 @@
+@use 'variables';
+@use 'mixins';
+
+
+.default_text_button {
+    color: variables.$primary-color;
+    font-weight: bolder;
+    border: 2px solid variables.$primary-color;
+    border-radius: 4px;
+    font-size: 10px;
+    padding: 4px;
+}

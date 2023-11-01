@@ -1,0 +1,20 @@
+@use 'variables';
+@use 'mixins';
+
+@mixin uniform-date-area {
+    border: 0px;
+    resize: none;
+    background-color: variables.$background;
+    color: variables.$primary-color;
+    font-size: 12px;
+}
+
+.default_date_area {
+    @include uniform-date-area;
+
+}
+
+.error_text_area {
+    @include uniform-date-area;
+    color: variables.$bittersweet
+}
