@@ -5,8 +5,10 @@
     @include mixins.uniform-cell-style;
     display: flex;
     grid-row: 'add-row-start / add-row-end';
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
+    border: 1px dashed white;
+    width: fit-content;
     svg:active {
         outline: 2px solid variables.$bittersweet;
     }

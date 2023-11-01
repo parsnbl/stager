@@ -3,11 +3,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import styles from '../stylesheets/Plan.module.scss';
 
 import DetailCell from '../components/DetailCell.jsx';
-import AddButton from '../components/AddRowButton.jsx';
+import ToggleRowsCols from './ToggleRowsCols.jsx';
 
 import {
   pushToColumn,
   pushColumn,
+  deleteRow,
+  deleteColumnIdx,
 
 } from '../reducers/planSlice.js';
 
@@ -71,6 +73,15 @@ const Plan = (props) => {
     );
   };
 
+  const removeRow = () => {
+    console.log('Delete Row occured!');
+    dispatch(deleteRow({idx: data.rowsLen - 1}));
+  };
+  const removeColumn = () => {
+    console.log('Delete Column occured!');
+    dispatch(deleteColumnIdx({idx: data.colsLen - 1}));
+  }
+
   //takes the array and the header
   const buildColumn = (arr, columnInd, headerName, type) => {
     const column = [];
@@ -115,13 +126,20 @@ const Plan = (props) => {
     }
     const len = data.colsLen;
     firstColumn.push(
-      <AddButton key={crypto.randomUUID()} clickHandler={addRow} />
+      <ToggleRowsCols
+        key={crypto.randomUUID()} 
+        toggleAddHandler={addRow}
+        toggleSubHandler={removeRow}
+        size = {14}
+      />
     );
     tableOutput.push(
-      <AddButton
+      <ToggleRowsCols
         key={crypto.randomUUID()}
         column={{ len }}
-        clickHandler={addColumn}
+        toggleAddHandler={addColumn}
+        toggleSubHandler={removeColumn}
+        size = {14}
       />
     );
     //console.log(tableOutput)

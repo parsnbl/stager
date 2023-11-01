@@ -179,17 +179,20 @@ tableLib.setColIdxAtInd = (state, idx, ind, value) => {
 tableLib.deleteColumn = (state, column) => {
   //note that this will delete from the front if there are duplicate keys.
   const idx = tableLib.findColumnId(state, column);
-  return tableLib.deleteColumnIdx(state, idx);
+  tableLib.deleteColumnIdx(state, idx);
 };
 
 tableLib.deleteColumnIdx = (state, idx) => {
   const temp = state._table[idx];
-  //delete state._table[idx];
-  for (let i = idx; i < Object.keys(state._table).length; i++) {
-    state._table[idx] = state._table[idx + 1];
+  if (!temp.fixed) {
+    for (let i = idx; i < Object.keys(state._table).length; i++) {
+      state._table[idx] = state._table[idx + 1];
+    }
+    delete state._table[state.colsLen - 1];
+    tableLib.increment(state, 'colsLen', -1);
   }
-  delete state._table[this.colsLen - 1];
-  tableLib.increment(state, 'colsLen', -1);
+  //delete state._table[idx];
+  
   //return temp;
 };
 
