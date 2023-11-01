@@ -1,89 +1,24 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import * as Icons from 'react-feather';
 import styles from '../stylesheets/Plan.module.scss';
-
 import HeaderCell from '../components/HeaderCell.jsx';
 import DetailCell from '../components/DetailCell.jsx';
 import AddButton from '../components/AddRowButton.jsx';
+import { pushToColumn, pushColumn, deleteRow, deleteColumnIdx, setColIdxAtInd } from '../reducers/planSlice.js';
 import { CONSTS } from '../../lib/DateTime';
 import Table from '../../lib/Table';
-import * as Icons from 'react-feather';
+import tableLib from  '../../lib/TableRedux';
+
+
 
 const Plan = props => {
-  
-  const data = {
-    numCols: 4,
-    numRows: 5,
-    dayView: CONSTS.DAILY,
-    table: [
-      ['Row Label', ['Try to do something cool', 'Try to do something cool', 'Try to do something cool', 'Try to do something cool', 'Try to do something cool']],
-      ['Start Date', ['2023-10-01', '2023-10-02', '2023-10-03', '2023-10-04', '2023-10-05', ]],
-      ['End Date', ['2023-10-15', '2023-10-16', '2023-10-17', '2023-10-18', '2023-10-19',]],
-      ['Status', ['In Progress', 'In Progress', 'In Progress', 'In Progress', 'In Progress']],
-    ]
-  };
+  const data = useSelector((state) => state.plan);
+  const dispatch = useDispatch();
 
   
-
-  const data_2 = {
-    dayView: CONSTS.DAILY,
-    table: {
-      rowsLen: 5,
-      colsLen: 4,
-      defaultEmpty: null,
-      keyDefault: 'column',
-      valuesDefault: 'values',
-      _table: {
-        '0': {
-          column: 'Row Label',
-          values: [
-            'Try to do something cool',
-            'Try to do something cool',
-            'Try to do something cool',
-            'Try to do something cool',
-            'Try to do something cool'
-          ]
-        },
-        '1': {
-          column: 'Start Date',
-          values: [
-            '2023-10-01',
-            '2023-10-02',
-            '2023-10-03',
-            '2023-10-04',
-            '2023-10-05'
-          ]
-        },
-        '2': {
-          column: 'End Date',
-          values: [
-            '2023-10-15',
-            '2023-10-16',
-            '2023-10-17',
-            '2023-10-18',
-            '2023-10-19'
-          ]
-        },
-        '3': {
-          column: 'Status',
-          values: [
-            'In Progress',
-            'In Progress',
-            'In Progress',
-            'In Progress',
-            'In Progress'
-          ]
-        }
-      }
-    }
-  };
-  const [planState, setPlanState ] = useState(data);
-  const [tableState, setTableState] = useState(data_2.table);
-  
-  const dataMap = new Map(planState.table);
-  const table = new Table(data_2.table);
-
   const produceColumns = () => {
-    const detailCols = '1fr '.repeat(planState.numCols - 1).trimEnd()
+    const detailCols = '1fr '.repeat(data.colsLen - 1).trimEnd();
     const calendarcolumns = ['1fr', '1fr', '1fr', '1fr', '1fr', '1fr'];
     return ['[plan-start detail-start]', detailCols, '[detail-end date-start]',...calendarcolumns, '[date-end plan-end]'].join(' ');
   };
@@ -93,24 +28,24 @@ const Plan = props => {
   const headerRows = ['20px'];
   const lastRow = ['30px'];
   const produceRows = () => {
-    const tableRows = '1fr '.repeat(planState.numRows).trimEnd(); 
+    const tableRows = '1fr '.repeat(data.rowsLen).trimEnd(); 
     return ['[header-start]', ...headerRows, '[header-end table-start]', tableRows, '[table-end add-row-start]', ...lastRow, '[add-row-end]'].join(' ');
   };
 
   const addRow = () => {
     console.log('Add Row occured!');
-    const newState = {...planState, numRows: planState.numRows += 1};
-    newState.table.map(column => column[1].push(null));
-    setPlanState(newState);
-    console.log(newState);
+    dispatch(pushToColumn({
+      column: 'Row Label',
+      value: null
+    }));
   };
 
   const addColumn = () => {
     console.log('Add Column occured!');
-    const newState = {...planState, numCols: planState.numCols += 1};
-    newState.table.push([null, new Array(planState.numRows).fill(null)]);
-    setPlanState(newState);
-    console.log(newState);
+    dispatch(pushColumn({
+      column: null,
+      values: new Array(data.numRows).fill(null)
+    }));
   };
 
   //takes the array and the header
@@ -136,28 +71,29 @@ const Plan = props => {
     return column;
   };
   
-  const buildTable = (dataMap) => {
-    const keys = Array.from(dataMap.keys());
-    console.log(dataMap.keys())
+  const buildTable = (data) => {
+
     let tableOutput = [];
     let firstColumn = [];
-    for (let i = 0; i < keys.length; i++){
-      const key = keys[i];
-      console.log(key, i);
-      const temp = buildColumn(dataMap.get(key), i, key);
+    for (let i = 0; i < data.colsLen; i++){
+      
+      const {column, values} = tableLib.getColumnIdx(data, i);//table.getColumnIdx(i);
+      console.log(column, values)
+      const temp = buildColumn(values, i, column);
       if (i === 0) {
         firstColumn = [...temp];
       } else {
         tableOutput = [...tableOutput, ...temp];
       }
     }
-    let len = keys.length;
+    const len = data.colsLen;
     firstColumn.push(<AddButton key={crypto.randomUUID()} clickHandler={addRow}/>);
-    tableOutput.push(<AddButton column={{len}} clickHandler={addColumn}/>);
-    console.log(tableOutput)
+    tableOutput.push(<AddButton key={crypto.randomUUID()} column={{len}} clickHandler={addColumn}/>);
+    //console.log(tableOutput)
     return [firstColumn, tableOutput];
   };
-  const [firstColumn, tableColumns] = buildTable(dataMap);
+
+  const [firstColumn, tableColumns] = buildTable(data);
   
 
  

@@ -8,7 +8,7 @@ const App = props => {
   return (
     //<Wrapper />
     <div className ="proto-wrapper">
-      <Plan />
+      <Plan key={crypto.randomUUID()}/>
     </div>
   );
 };

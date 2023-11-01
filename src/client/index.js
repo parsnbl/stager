@@ -6,7 +6,7 @@ import store from './store.js';
 
 
 const root = createRoot(document.getElementById('app'));
-console.log(root)
+//console.log(root)
 root.render(
   // wrap the App in the Provider Component and pass in the store
   <Provider store={store}>

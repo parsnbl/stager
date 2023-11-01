@@ -89,8 +89,14 @@ class Table {
   };
   pushToColumn = (column, value) => {
     if (this.hasColumn(column)) {
+      console.log('Column Found')
       const id = this._findColumnID(column);
+      console.log('id is', id)
       this._table[id][this.valuesDefault].push(value);
+      console.log('vals array', this._table[id][this.valuesDefault])
+      console.log('rowsLen before', this.rowsLen);
+      this._increment('rowsLen', 1);
+      console.log('rowsLen after', this.rowsLen);
       this._populateNulls();
     } else {
       throw new Error(`Column is not available in table.`)
@@ -175,6 +181,7 @@ class Table {
     this._table = {};
     this.rowsLen = 0;
     this.colsLen = 0;
+    return this;
   };
 
   keys = () => {
@@ -208,6 +215,7 @@ class Table {
       this._table = json._table;
       this._populateNulls();
       this._removeNullRows();
+      return this;
     } catch(err) {
       console.log(err);
       throw err;
@@ -240,6 +248,7 @@ class Table {
       });
       this._populateNulls();
       this._removeNullRows();
+      return this;
     } catch(err) {
       console.log(err);
       throw err;
