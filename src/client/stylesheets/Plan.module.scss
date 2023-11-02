@@ -10,6 +10,7 @@ $primaryColor: variables.$primary-color;
     border: 1px solid variables.$border;
     height: 500px;
     padding-left: 10px;
+    width: 980px;
 }
 
 .plan_details {
@@ -20,6 +21,8 @@ $primaryColor: variables.$primary-color;
 
 .plan_table {
     @include mixins.uniform-grid-settings;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 
 /*
@@ -39,7 +42,8 @@ $primaryColor: variables.$primary-color;
 .tables_wrapper {
     display: flex;
     color: variables.$primary-color;
-    
+    overflow-y: auto;
+    height: 100%;
 }
 
 .plan_column_one {

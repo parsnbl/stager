@@ -5,9 +5,15 @@ const TextArea = (props) => {
   let styleSelect = styles.default_text_area;
   let value = props.value === null ? '' : props.value;
   //console.log('textarea props', props)
+  let style = {};
+  if (props.style) {
+    style = props.style;
+  };
+  
   return (
     <textarea
       key={props._key}
+      style={style}
       className={styleSelect}
       value={value}
       rows={1}

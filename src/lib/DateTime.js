@@ -20,6 +20,10 @@ class DateTime extends Date {
     const yearStart = new Date(this.getFullYear(), 0 , 1);
     return Math.floor((this - yearStart) / (24 * 60 * 60 * 1000)) + 1;
   }
+  getDaysFrom = (dateObj) => {
+    const difference = Math.abs(this-dateObj);
+    return Math.floor((difference) / (24 * 60 * 60 * 1000)) + 1;
+  }
   getWeekNumber = () => Math.ceil(this.getDaysfromYearStart() / 7);
   addDays = (days) => {
     const daysFromStart = this.getDaysFromYearStart()

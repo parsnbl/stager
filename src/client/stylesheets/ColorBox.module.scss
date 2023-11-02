@@ -1,0 +1,7 @@
+@use 'variables';
+@use 'mixins';
+
+.default_color_box {
+    min-height: 24px;
+    min-width: 100%;
+}

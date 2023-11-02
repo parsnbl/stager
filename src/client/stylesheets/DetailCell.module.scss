@@ -7,12 +7,16 @@
     display: flex;
     justify-content: left;
     align-items: center;
+    height: 34px;
     
 }
 
 .plan_header_cell {
     @include mixins.uniform-cell-style;
     @include mixins.cell-borders;
-    padding-bottom: 0px;
+    
     grid-row: header;
+    
+    display: flex;
+    justify-content: left;
 }

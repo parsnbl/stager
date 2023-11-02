@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styles from '../stylesheets/Plan.module.scss';
-
+import DateTime from '../../lib/DateTime';
 import DetailCell from '../components/DetailCell.jsx';
 import ToggleRowsCols from './ToggleRowsCols.jsx';
 
@@ -19,27 +19,32 @@ const Plan = (props) => {
   const data = useSelector((state) => state.plan);
   const dispatch = useDispatch();
 
+  // console.log(data._table[1].values)
+  // console.log(data._table[2].values)
+  const daysInCal = new DateTime(data.earliestDate).makeTimezoneAware().getDaysFrom(new DateTime(data.latestDate)) + 1;
+  //console.log(daysInCal)
+
   //colsLen
   //rowsLen
 
   const produceColumns = () => {
-    const detailCols = '1fr '.repeat(data.colsLen - 1).trimEnd();
-    const calendarcolumns = ['1fr', '1fr', '1fr', '1fr', '1fr', '1fr'];
+    const detailCols = 'min-content '.repeat(data.colsLen - 1).trimEnd();
+    const calendarcolumns = 'minmax(30px, 1fr) '.repeat(daysInCal).trimEnd();
     return [
       '[plan-start detail-start]',
       detailCols,
       '[detail-end date-start]',
-      ...calendarcolumns,
+      calendarcolumns,
       '[date-end plan-end]',
     ].join(' ');
   };
 
   // const rows = '[header-start]  20px [header-end table-start] 1fr 1fr 1fr 1fr 1fr';
 
-  const headerRows = ['20px'];
+  const headerRows = ['39px'];
   const lastRow = ['30px'];
   const produceRows = () => {
-    const tableRows = '1fr '.repeat(data.rowsLen).trimEnd();
+    const tableRows = '39px '.repeat(data.rowsLen).trimEnd();
     return [
       '[header-start]',
       ...headerRows,
@@ -51,6 +56,7 @@ const Plan = (props) => {
     ].join(' ');
   };
 
+  
   const addRow = () => {
     console.log('Add Row occured!');
     dispatch(
@@ -150,7 +156,7 @@ const Plan = (props) => {
 
   const rows = produceRows();
   const columns = produceColumns();
-
+  //console.log(rows)
   return (
     <div className={styles.plan_container}>
       <div className={styles.plan_details}>

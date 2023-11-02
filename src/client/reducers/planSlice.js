@@ -5,7 +5,9 @@ import tableLib, { dataTypes } from '../../lib/TableLib.js';
 const initialState = {
   dayView: CONSTS.DAILY,
   rowsLen: 5,
-  colsLen: 4,
+  colsLen: 5,
+  earliestDate:'2023-10-01',
+  latestDate: '2023-10-19',
   defaultEmpty: null,
   defaultColKey: 'column',
   defaultColValues: 'values',
@@ -35,7 +37,7 @@ const initialState = {
       fixed: true,
     },
     2: {
-      column: 'End Date',
+      column: 'Due Date',
       values: [
         '2023-10-15',
         '2023-10-16',
@@ -49,15 +51,27 @@ const initialState = {
     3: {
       column: 'Status',
       values: [
-        'In Progress',
-        'In Progress',
-        'In Progress',
-        'In Progress',
-        'In Progress',
+        'in_progress',
+        'in_progress',
+        'in_progress',
+        'in_progress',
+        'in_progress',
       ],
       type: dataTypes.const.BUTTON,
       fixed: true,
     },
+    4: {
+      column: 'Color',
+      values: [
+        'bittersweet',
+        'light-green',
+        'tropical-indigo',
+        'gamboge',
+        'celestial-blue',
+      ],
+      type: dataTypes.const.COLOR,
+      fixed: true,
+    }
   },
 };
 
@@ -70,7 +84,9 @@ const planSlice = createSlice({
         state,
         action.payload.column,
         action.payload.value
-      )
+      );
+      tableLib.setEarliest(state);
+      tableLib.setLatest(state);
     },
     pushColumn(state, action) {
       tableLib.pushColumn(
@@ -82,7 +98,9 @@ const planSlice = createSlice({
       )
     },
     deleteRow(state, action) {
-      tableLib.deleteRow(state, action.payload.idx)
+      tableLib.deleteRow(state, action.payload.idx);
+      tableLib.setEarliest(state);
+      tableLib.setLatest(state);
     },
     deleteColumnIdx(state, action) {
       tableLib.deleteColumnIdx(state, action.payload.idx);
@@ -94,6 +112,8 @@ const planSlice = createSlice({
         action.payload.ind,
         action.payload.value
       );
+      tableLib.setEarliest(state);
+      tableLib.setLatest(state);
     },
     renameColIdx(state, action) {
       tableLib.renameColIdx(state, action.payload.idx, action.payload.value);

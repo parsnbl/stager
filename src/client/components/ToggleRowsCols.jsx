@@ -1,6 +1,6 @@
 import React from 'react';
 import * as Icons from 'react-feather';
-import styles from '../stylesheets/RoggleRowsCols.module.scss';
+import styles from '../stylesheets/ToggleRowsCols.module.scss';
 
 const ToggleRowsCols = ({ toggleAddHandler, toggleSubHandler , row, column, size }) => {
   //console.log(clickHandler)
