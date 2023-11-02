@@ -2,5 +2,15 @@
 @use 'mixins';
 
 .default_date_header {
-    
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 2px 5px;
+    width: fit-content;
+    border-right: 1px solid variables.$border;
+    border-bottom: 1px solid variables.$border;
+    height: 20px;
+    font-family: sans-serif;
+    font-size: 13px;
+    font-weight: bolder;
 }

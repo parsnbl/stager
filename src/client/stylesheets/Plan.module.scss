@@ -16,7 +16,13 @@
     h1 {
         color: variables.$primary-color;
     }
+    .plan_description {
+        color: variables.$primary-text;
+        font-size: 14px;
+        margin: 0px 0px 30px 10px;
+    }
 }
+
 .plan_details_toolbar {
     display: flex;
 }

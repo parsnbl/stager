@@ -23,7 +23,7 @@ const typeOptions = {
   COLOR: DropDown,
 };
 
-const colorOptions = {
+export const colorOptions = {
   0: { value: 'gamboge', label: <ColorBox hex={'#F3A738'} /> },
   1: { value: 'mimi-pink', label: <ColorBox hex={'#EDD2E0'} /> },
   2: { value: 'bittersweet', label: <ColorBox hex={'#FF5E5B'} /> },

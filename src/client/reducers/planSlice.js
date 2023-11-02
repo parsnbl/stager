@@ -4,6 +4,8 @@ import tableLib, { dataTypes } from '../../lib/tableLib.js';
 
 const initialState = {
   dayView: CONSTS.DAILY,
+  planName: 'Launch an App!',
+  planDescription: 'Build a cool app for people to enjoy.',
   rowsLen: 5,
   colsLen: 5,
   earliestDate: '2023-10-01',

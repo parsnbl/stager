@@ -1,9 +1,12 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styles from '../stylesheets/Plan.module.scss';
-import DateTime from '../../lib/DateTime';
+import DateTime, { CONSTS } from '../../lib/DateTime';
 import DetailCell from '../components/DetailCell.jsx';
 import ToggleRowsCols from './ToggleRowsCols.jsx';
+import DateHeader from './DateHeader.jsx';
+import GanttBar from './GanttBar.jsx';
+import DateLine from './DateLine.jsx';
 
 import {
   pushToColumn,
@@ -15,6 +18,17 @@ import {
 
 import tableLib , { dataTypes } from '../../lib/tableLib';
 
+const colorOptions = {
+  'gamboge': '#F3A738' ,
+  'mimi-pink': '#EDD2E0',
+  'bittersweet': '#FF5E5B',
+  'light-green': '#ADF6B1',
+  'tea-green': '#DBFEB8',
+  'cadet-gray': '#7D98A1',
+  'tropical-indigo': '#7F7EFF',
+  'celestial-blue': '#20A4F3',
+};
+
 const Plan = (props) => {
   const data = useSelector((state) => state.plan);
   const dispatch = useDispatch();
@@ -22,14 +36,14 @@ const Plan = (props) => {
   // console.log(data._table[1].values)
   // console.log(data._table[2].values)
   const daysInCal = new DateTime(data.earliestDate).makeTimezoneAware().getDaysFrom(new DateTime(data.latestDate)) + 1;
-  console.log(daysInCal)
+  console.log(daysInCal);
 
   //colsLen
   //rowsLen
 
   const produceColumns = () => {
     const detailCols = 'min-content '.repeat(data.colsLen - 1).trimEnd();
-    const calendarcolumns = 'minmax(30px, 1fr) '.repeat(daysInCal).trimEnd();
+    const calendarcolumns = '1fr '.repeat(daysInCal).trimEnd();
     return [
       '[plan-start detail-start]',
       detailCols,
@@ -40,8 +54,60 @@ const Plan = (props) => {
   };
 
   const produceDateHeaders = () => {
-    
-  }
+    const pointerDate = new DateTime(data.earliestDate).makeTimezoneAware();
+    const headers = [];
+    //add support for different date lengths
+    if (data.dayView === CONSTS.DAILY) {
+      for (let i = data.colsLen; i < data.colsLen + daysInCal; i++) {
+        const header = pointerDate.makeDateHeader();
+        headers.push(<DateHeader key={crypto.randomUUID()} column={i} value={header}/>);
+        pointerDate.addDays(1);
+      }
+    }
+    return headers;
+  };
+
+  const produceDateLine = () => {
+    const today = new DateTime().makeTimezoneAware();
+    const firstDate = new DateTime(data.earliestDate);
+    const lastDate = new DateTime(data.latestDate);
+    const startColumn = data.colsLen + firstDate.getDaysFrom(today);
+    let visible;
+    if (today > lastDate) {
+      visible = false;
+    } else {
+      visible = true;
+    }
+    return <DateLine 
+      column={startColumn} 
+      span={data.rowsLen}
+      visible={visible}
+    />;
+  };
+  
+  const produceGanttBars = () => {
+    const bars = [];
+    for (let i = 0; i < data.rowsLen; i++) {
+      const row = i + 2;
+      const color = colorOptions[data._table[4].values[i]];
+      const startDate = new DateTime(data._table[1].values[i]);
+      const dueDate = new DateTime(data._table[2].values[i]);
+      const firstDate = new DateTime(data.earliestDate);
+      const startColumn = data.colsLen + firstDate.getDaysFrom(startDate);
+      const lengthOfBar = startDate.getDaysFrom(dueDate);
+      console.log(color)
+      bars.push(
+        <GanttBar 
+          key={crypto.randomUUID()}
+          startColumn={startColumn}
+          lengthOfBar={lengthOfBar}
+          color={color}
+          row={row}
+        />
+      );
+    }
+    return bars;
+  };
   // const rows = '[header-start]  20px [header-end table-start] 1fr 1fr 1fr 1fr 1fr';
 
   
@@ -56,7 +122,6 @@ const Plan = (props) => {
       '[table-end]'
     ].join(' ');
   };
-
   
   const addRow = () => {
     console.log('Add Row occured!');
@@ -147,11 +212,15 @@ const Plan = (props) => {
 
   const rows = produceRows();
   const columns = produceColumns();
+  const dateHeaders = produceDateHeaders();
+  const ganttBars = produceGanttBars();
+  const dateLine = produceDateLine();
   //console.log(rows)
   return (
     <div className={styles.plan_container}>
       <div className={styles.plan_details}>
-        <h1>PLAN</h1>
+        <h1>{data.planName.toUpperCase()}</h1>
+        <div className={styles.plan_description}>{data.planDescription}</div>
         <div className={styles.plan_details_toolbar}>
           <ToggleRowsCols
             key={crypto.randomUUID()} 
@@ -184,7 +253,9 @@ const Plan = (props) => {
           }}
         >
           {tableColumns}
-
+          {dateHeaders}
+          {ganttBars}
+          {dateLine}
           {/*
           <div className={styles.plan_detail_cell} style={{
             gridRow: '2', backgroundColor: 'lightblue', 

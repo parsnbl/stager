@@ -1,0 +1,12 @@
+@use 'variables';
+@use 'mixins';
+
+.default_dateline {
+    width: 2px;
+    background-color: variables.$bittersweet;
+    border-left: 1px solid variables.$border;
+    border-right: 1px solid variables.$border;
+    height: 100%;
+    position:relative;
+    left: -2px;
+}

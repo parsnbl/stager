@@ -22,14 +22,14 @@ class DateTime extends Date {
   }
   getDaysFrom = (dateObj) => {
     const difference = Math.abs(this-dateObj);
-    return Math.floor((difference) / (24 * 60 * 60 * 1000)) + 1;
+    return Math.floor((difference) / (24 * 60 * 60 * 1000));
   }
   getWeekNumber = () => Math.ceil(this.getDaysfromYearStart() / 7);
   addDays = (days) => {
     const daysFromStart = this.getDaysFromYearStart()
     this.setMonth(0);
     this.setDate(1);
-    this.setDate(daysFromStart + days)
+    this.setDate(daysFromStart + days + 1);
     return this;
   }
   addTime = (hours, minutes, seconds, ms) => {
@@ -46,12 +46,15 @@ class DateTime extends Date {
       minutes+origMinutes, 
       seconds+origSeconds, 
       ms+origMs
-      );
+    );
     return this;
-  }
+  };
   clone = () => {
     return new DateTime(this.getTime());
-  }
+  };
+  makeDateHeader = () => {
+    return this.toLocaleString('en-us',{month: '2-digit', day: '2-digit'});
+  };
 
 }
 
