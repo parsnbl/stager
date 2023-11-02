@@ -17,11 +17,11 @@ const initialState = {
     0: {
       column: 'Row Label',
       values: [
-        'Try to do something cool',
-        'Try to do something cool',
-        'Try to do something cool',
-        'Try to do something cool',
-        'Try to do something cool',
+        'Do Wireframes',
+        'Hold Scrum',
+        'Express the routes',
+        'Master CSS Grid',
+        'Profit',
       ],
       type: dataTypes.const.TEXT,
       fixed: true,

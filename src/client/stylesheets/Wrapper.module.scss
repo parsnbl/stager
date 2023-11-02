@@ -1,21 +1,14 @@
 @use 'variables' as *;
 @use 'mixins' as *;
 
-html {
-    box-sizing: border-box;
-    min-width: 1313px;
-    max-width: 1313px;
+.container{
+    @include sizing-border;
+    display: grid;
+    grid-template-columns: [app-left sidebar-start] 230px [sidebar-end tabview-start] 1fr 1fr 1fr [app-right tabview-end];
+    grid-template-rows: [nav-start app-top] 44px [nav-end main-start] 1fr [main-end app-bottom];
+    width: 100%;
+    
 }
-body {
-    margin: 0px;
-    font-family: sans-serif;
-}
-html, body, #app, #app>div {
-    height: calc(100% - 1px);
-    width: calc(100% - 1px);
-    background-color: $background;
-  }
-
 
 
 .nav {
@@ -41,7 +34,7 @@ html, body, #app, #app>div {
     margin: 0px 8.5px;
 }
 
-.file-explorer-icons {
+.file_explorer_icons {
     @include icon-bar;
 }
 
@@ -53,19 +46,22 @@ html, body, #app, #app>div {
     display: grid;
     grid-template-rows: 92px 1fr;
     background-color:$tabs;
+    grid-template-columns: 1080px;
 }
-.tabview-tabs {
+.tabview_tabs {
     background-color: $background;
     display: flex;
     align-items: flex-end;
+    grid-column: 1 / span 1;
     
     
 }
-.tabview-content {
+.tabview_content {
     border-top: 1px solid $border;
+    max-width: 1080px;
     
 }
-.tabview-top-tab {
+.tabview_top_tab {
     background-color: $tabs;
     height: 50%;
     border-top: 3px solid $border;
@@ -73,12 +69,4 @@ html, body, #app, #app>div {
     width: 80px;
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;
-}
-
-
-.proto-wrapper {
-    display: flex;
-    flex-direction:column;
-    justify-content: center;
-    align-items: center;
 }

@@ -7,10 +7,10 @@ import './stylesheets/styles.scss';
 
 const App = props => {
   return (
-    //<Wrapper />
-    <div className ="proto-wrapper">
-      <Plan key={crypto.randomUUID()}/>
-    </div>
+    <Wrapper />
+    // <div className ="proto-wrapper">
+    //   <Plan key={crypto.randomUUID()}/>
+    // </div>
   );
 };
 

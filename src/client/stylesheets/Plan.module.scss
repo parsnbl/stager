@@ -6,10 +6,11 @@
 .plan_container {
     display: flex;
     flex-direction: column;
-    border: 1px solid variables.$border;
+    margin-left: 20px;
+    margin-right: 20px;
     height: 500px;
     padding-left: 10px;
-    width: 980px;
+    width: inherit;
 }
 
 .plan_details {
@@ -29,7 +30,6 @@
 
 .plan_table {
     @include mixins.uniform-grid-settings;
-    overflow-x: auto;
     position: relative;
 }
 
@@ -52,6 +52,7 @@
     color: variables.$primary-color;
     overflow-y: auto;
     height: 100%;
+    overflow-x: auto;
 }
 
 .plan_column_one {
