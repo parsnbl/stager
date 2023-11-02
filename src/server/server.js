@@ -1,6 +1,6 @@
-import path from 'path';
-import express from 'express';
 
+import express from 'express';
+import planController from './controllers/planController.js';
 
 const app = express();
 
@@ -14,18 +14,35 @@ const planRouter = express.Router();
 
 app.use('/plans', planRouter);
 
-planRouter.get('/all', 
-  (req, res) =>{
-
+planRouter.get('/all',
+  planController.getAllPlans,
+  (req, res) => {
+    res.status(200).json(res.locals.plans);
   });
 
-planRouter.post('/new', (req, res) => {});
+planRouter.post('/new',
+  planController.createNewPlan,
+  (req, res) => {
+    res.status(200).json(res.locals.newPlan);
+  });
 
-planRouter.get('/:planid', (req, res) => {});
+planRouter.get('/:id',
+  planController.getPlanById,
+  (req, res) => {
+    res.status(200).json(res.locals.results);
+  });
 
-planRouter.patch('/:planid', (req, res) => {});
+planRouter.patch('/:id',
+  planController.updatePlanById,
+  (req, res) => {
+    res.status(200).json(res.locals.results);
+  });
 
-planRouter.del('/:planid', (req, res) => {});
+planRouter.delete('/:id',
+  planController.deletePlanById,
+  (req, res) => {
+    res.status(200).json(res.locals.results);
+  });
 
 
 app.use((req, res) => res.sendStatus(404));

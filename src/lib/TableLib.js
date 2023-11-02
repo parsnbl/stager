@@ -1,5 +1,4 @@
 import React from 'react';
-import { createAction } from '@reduxjs/toolkit';
 import DateTime from './DateTime.js';
 // import { buttonOptions } from '../client/components/TextButton.jsx';
 // import { colorOptions } from '../client/components/ColorBox.jsx';
@@ -306,9 +305,6 @@ tableLib.getColIdxAtInd = (state, idx, ind) => {
 // };
 
 //action creator for datatypes TextArea
-
-const textAreaUpdate = createAction('plans/setColIdxAtInd');
-
 
 
 

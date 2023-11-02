@@ -16,7 +16,7 @@ import { CONSTS } from "../../lib/DateTime.js";
 */
 const emptyPlan = {
   planName: 'Untitled',
-  planDescription: '',
+  planDescription: 'Write here!',
   rowsLen: 0,
   colsLen: 0,
   earliestDate: new Date().toISOString().slice(0,10),
@@ -76,21 +76,23 @@ planController.getAllPlans = (req, res, next) => {
     }));
 };
 
-planController.createNewPlan = (req, res, next) => {
-  PlanModel.create(emptyPlan)
-    .then(data => {
-      res.locals.newPlan = data;
-      return next();
-    })
-    .catch(err => next({
-      log: `planController.createNewPlan: error occured creating plan: ${JSON.stringify(err)}`,
+planController.createNewPlan = async (req, res, next) => {
+  try {
+    //console.log('right before the model');
+    const doc = await PlanModel.create(emptyPlan);
+    res.locals.newPlan = doc;
+    return next();
+  } catch (err) {
+    return next({
+      log: `planController.createNewPlan: error occured creating plan: ${err}`,
       code: 500,
       message: {err: 'planController.createNewPlan: error occured creating plan.'}
-    }));
+    });
+  }
 };
 
 planController.getPlanById = (req, res, next) => {
-  const { id } = req.body;
+  const { id } = req.params;
   if (id === undefined) {
     return next({
       log: `planController.getPlanById: provided id was undefined.`,
@@ -118,7 +120,8 @@ planController.getPlanById = (req, res, next) => {
 };
 
 planController.updatePlanById = async (req, res, next) => {
-  const { id, value } = req.body;
+  const { id } = req.params;
+  const { value } = req.body;
   if (id === undefined) {
     return next({
       log: `planController.updatePlanById: provided id was undefined.`,
@@ -151,7 +154,7 @@ planController.updatePlanById = async (req, res, next) => {
     return next();
   } catch(err) {
     return next({
-      log: `planController.updatePlanById: error occured getting plan with id ${id}:${JSON.stringify(err)}`,
+      log: `planController.updatePlanById: error occured getting plan with id ${id}:${err}`,
       code: 500,
       message: {err: 'planController.updatePlanById: Error occured retrieving plan.'
       }});
@@ -159,7 +162,8 @@ planController.updatePlanById = async (req, res, next) => {
 };
 
 planController.deletePlanById = async (req, res, next) => {
-  const { id, value } = req.body;
+  const { id } = req.params;
+  const { value } = req.body;
   if (id === undefined) {
     return next({
       log: `planController.deletePlanById: provided id was undefined.`,
