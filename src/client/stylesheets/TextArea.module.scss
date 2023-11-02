@@ -4,9 +4,10 @@
 @mixin uniform-text-area {
     border: 0px;
     resize: none;
-    background-color: variables.$background;
     color: variables.$primary-color;
     font-size: 12px;
+    font-family: sans-serif;
+    background-color: variables.$tabs;
 }
 
 .default_text_area {
