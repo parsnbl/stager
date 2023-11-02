@@ -9,9 +9,26 @@ const PORT = 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const planRouter = express.Router();
 
 
-app.use((req, res) => res.status(404).send('This is not the page you\'re looking for...'));
+app.use('/plans', planRouter);
+
+planRouter.get('/all', 
+  (req, res) =>{
+
+  });
+
+planRouter.post('/new', (req, res) => {});
+
+planRouter.get('/:planid', (req, res) => {});
+
+planRouter.patch('/:planid', (req, res) => {});
+
+planRouter.del('/:planid', (req, res) => {});
+
+
+app.use((req, res) => res.sendStatus(404));
 
 app.use((err, req, res, next) => {
   const defaultErr = {
