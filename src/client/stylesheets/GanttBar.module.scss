@@ -1,0 +1,8 @@
+@use 'variables';
+@use 'mixins';
+
+.default_gantt_bar {
+    border-radius: 5px;
+    border: 0px;
+    padding: 0px;
+}

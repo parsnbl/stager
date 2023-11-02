@@ -13,7 +13,7 @@ import {
 
 } from '../reducers/planSlice.js';
 
-import tableLib , { dataTypes } from '../../lib/TableLib';
+import tableLib , { dataTypes } from '../../lib/tableLib';
 
 const Plan = (props) => {
   const data = useSelector((state) => state.plan);
@@ -22,7 +22,7 @@ const Plan = (props) => {
   // console.log(data._table[1].values)
   // console.log(data._table[2].values)
   const daysInCal = new DateTime(data.earliestDate).makeTimezoneAware().getDaysFrom(new DateTime(data.latestDate)) + 1;
-  //console.log(daysInCal)
+  console.log(daysInCal)
 
   //colsLen
   //rowsLen
@@ -39,20 +39,21 @@ const Plan = (props) => {
     ].join(' ');
   };
 
+  const produceDateHeaders = () => {
+    
+  }
   // const rows = '[header-start]  20px [header-end table-start] 1fr 1fr 1fr 1fr 1fr';
 
-  const headerRows = ['39px'];
-  const lastRow = ['30px'];
+  
   const produceRows = () => {
+    const headerRows = ['39px'];
     const tableRows = '39px '.repeat(data.rowsLen).trimEnd();
     return [
       '[header-start]',
       ...headerRows,
       '[header-end table-start]',
       tableRows,
-      '[table-end add-row-start]',
-      ...lastRow,
-      '[add-row-end]',
+      '[table-end]'
     ].join(' ');
   };
 
@@ -83,10 +84,11 @@ const Plan = (props) => {
     console.log('Delete Row occured!');
     dispatch(deleteRow({idx: data.rowsLen - 1}));
   };
+
   const removeColumn = () => {
     console.log('Delete Column occured!');
     dispatch(deleteColumnIdx({idx: data.colsLen - 1}));
-  }
+  };
 
   //takes the array and the header
   const buildColumn = (arr, columnInd, headerName, type) => {
@@ -132,21 +134,10 @@ const Plan = (props) => {
     }
     const len = data.colsLen;
     firstColumn.push(
-      <ToggleRowsCols
-        key={crypto.randomUUID()} 
-        toggleAddHandler={addRow}
-        toggleSubHandler={removeRow}
-        size = {14}
-      />
+      
     );
     tableOutput.push(
-      <ToggleRowsCols
-        key={crypto.randomUUID()}
-        column={{ len }}
-        toggleAddHandler={addColumn}
-        toggleSubHandler={removeColumn}
-        size = {14}
-      />
+      
     );
     //console.log(tableOutput)
     return [firstColumn, tableOutput];
@@ -161,6 +152,22 @@ const Plan = (props) => {
     <div className={styles.plan_container}>
       <div className={styles.plan_details}>
         <h1>PLAN</h1>
+        <div className={styles.plan_details_toolbar}>
+          <ToggleRowsCols
+            key={crypto.randomUUID()} 
+            toggleAddHandler={addRow}
+            toggleSubHandler={removeRow}
+            size = {14}
+            location = {'rows'}
+          />
+          <ToggleRowsCols
+            key={crypto.randomUUID()}
+            toggleAddHandler={addColumn}
+            toggleSubHandler={removeColumn}
+            size = {14}
+            location = {'cols'}
+          />
+        </div>
       </div>
       <div className={styles.tables_wrapper}>
         <div

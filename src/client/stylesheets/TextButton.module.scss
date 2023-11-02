@@ -10,12 +10,21 @@
     padding: 4px;
 }
 
+@mixin default_button_color {
+    color: variables.$primary-color;
+    background-color: variables.$background;
+    border-color: variables.$primary-color;
+}
+
 .default_text_button {
     @include uniform_text_button;
     color: variables.$primary-color;
     background-color: variables.$background;
     border-color: variables.$primary-color;
 }
+
+
+
 
 .inverted_text_button {
     @include uniform_text_button;

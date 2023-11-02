@@ -1,10 +1,26 @@
 @use 'variables';
 @use 'mixins';
 
+
+@mixin default_add_row {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border: 1px solid variables.$gun-metal;
+    width: fit-content;
+    svg {
+        margin: 0px 2px;
+        color:variables.$tea-green;
+    }
+    svg:active {
+        color: variables.$bittersweet;
+
+    }
+}
 .add_row_button {
     @include mixins.uniform-cell-style;
     display: flex;
-    grid-row: 'add-row-start / add-row-end';
+    
     justify-content: flex-start;
     align-items: center;
     border: 1px dashed white;
@@ -12,4 +28,16 @@
     svg:active {
         outline: 2px solid variables.$bittersweet;
     }
+}
+
+.rows_toggle {
+    @include default_add_row;
+    @include mixins.uniform-cell-style;
+   
+}
+
+.cols_toggle {
+    @include default_add_row;
+    @include mixins.uniform-cell-style;
+    
 }

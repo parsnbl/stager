@@ -2,7 +2,6 @@
 @use 'mixins';
 
 
-$primaryColor: variables.$primary-color;
 
 .plan_container {
     display: flex;
@@ -18,11 +17,14 @@ $primaryColor: variables.$primary-color;
         color: variables.$primary-color;
     }
 }
+.plan_details_toolbar {
+    display: flex;
+}
 
 .plan_table {
     @include mixins.uniform-grid-settings;
     overflow-x: auto;
-    overflow-y: hidden;
+    position: relative;
 }
 
 /*

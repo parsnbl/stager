@@ -1,12 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { CONSTS } from '../../lib/DateTime.js';
-import tableLib, { dataTypes } from '../../lib/TableLib.js';
+import tableLib, { dataTypes } from '../../lib/tableLib.js';
 
 const initialState = {
   dayView: CONSTS.DAILY,
   rowsLen: 5,
   colsLen: 5,
-  earliestDate:'2023-10-01',
+  earliestDate: '2023-10-01',
   latestDate: '2023-10-19',
   defaultEmpty: null,
   defaultColKey: 'column',
@@ -71,7 +71,7 @@ const initialState = {
       ],
       type: dataTypes.const.COLOR,
       fixed: true,
-    }
+    },
   },
 };
 
@@ -80,11 +80,7 @@ const planSlice = createSlice({
   initialState,
   reducers: {
     pushToColumn(state, action) {
-      tableLib.pushToColumn(
-        state,
-        action.payload.column,
-        action.payload.value
-      );
+      tableLib.pushToColumn(state, action.payload.column, action.payload.value);
       tableLib.setEarliest(state);
       tableLib.setLatest(state);
     },
@@ -94,8 +90,8 @@ const planSlice = createSlice({
         action.payload.column,
         action.payload.values,
         action.payload.type,
-        action.payload.fixed,
-      )
+        action.payload.fixed
+      );
     },
     deleteRow(state, action) {
       tableLib.deleteRow(state, action.payload.idx);
@@ -117,9 +113,9 @@ const planSlice = createSlice({
     },
     renameColIdx(state, action) {
       tableLib.renameColIdx(state, action.payload.idx, action.payload.value);
-    }
+    },
   },
-})
+});
 
 export const getColumnByIdx = (state, idx) => state.plan._table[idx];
 
@@ -130,7 +126,7 @@ export const {
   deleteRow,
   deleteColumnIdx,
   setColIdxAtInd,
-  renameColIdx
+  renameColIdx,
 } = actions;
 
 export default reducer;
