@@ -131,6 +131,7 @@ const Plan = (props) => {
         value: null,
       })
     );
+    ganttBars = produceGanttBars();
   };
 
   const addColumn = () => {
@@ -213,7 +214,7 @@ const Plan = (props) => {
   const rows = produceRows();
   const columns = produceColumns();
   const dateHeaders = produceDateHeaders();
-  const ganttBars = produceGanttBars();
+  let ganttBars = produceGanttBars();
   const dateLine = produceDateLine();
   //console.log(rows)
   return (

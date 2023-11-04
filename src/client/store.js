@@ -5,6 +5,7 @@ import { userSlice } from './reducers/userSlice.js';
 const store = configureStore({
   reducer: {
     plan: planSlice,
+    user: userSlice
   },
 });
 
