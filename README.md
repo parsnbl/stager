@@ -1,15 +1,11 @@
-# 🚀 Welcome to your new awesome project!
+# stager
 
-This project has been created using **webpack-cli**, you can now run
+An open-source react app for generating gantt charts with a modern interface and focus on customizability.
 
-```
-npm run build
-```
-
-or
-
-```
-yarn build
-```
-
-to bundle your application
+## Upcoming Features
+- [] docker encapsulation
+- [] conversion to electron app
+- [] conversion to filebased storage
+- [] testing
+- [] ci/cd pipeline
+- [] documentation
